@@ -2,20 +2,20 @@
 
 function validate_message($message)
 {
-    // function to check if message is correct (must have at least 10 caracters (after trimming))
-
+    // function to check if message is correct (must have at least 10 characters (after trimming))
+    return strlen(trim($message)) >= 10;
 }
 
 function validate_username($username)
 {
     // function to check if username is correct (must be alphanumeric => Use the function 'ctype_alnum()')
-
+    return ctype_alnum($username);
 }
 
-function validate_email($username)
+function validate_email($email)
 {
     // function to check if email is correct (must contain '@')
-
+    return filter_var($email, FILTER_VALIDATE_EMAIL);
 }
 
 
@@ -32,15 +32,34 @@ $form_valid = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Here is the list of error messages that can be displayed:
-    //
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $message = $_POST['message'];
+    $terms = isset($_POST['terms']);
     // "Message must be at least 10 caracters long"
+    if (!validate_message($message)) {
+        $message_error = "Message must be at least 10 characters long";
+    }
     // "You must accept the Terms of Service"
+    if (!$terms) {
+        $terms_error = "You must accept the Terms of Service";
+    }
     // "Please enter a username"
+    if (empty($username)) {
+        $user_error = "Please enter a username";
+    } 
     // "Username should contains only letters and numbers"
+    elseif (!validate_username($username)) {
+        $user_error = "Username should contain only letters and numbers";
+    }
     // "Please enter an email"
+    if (empty($email)) {
+        $email_error = "Please enter an email";
+    } 
     // "email must contain '@'"
-
-
+    elseif (!validate_email($email)) {
+        $email_error = "Email must contain '@'";
+    }
 
 }
 
