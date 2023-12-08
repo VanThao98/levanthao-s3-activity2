@@ -27,6 +27,7 @@ $username = "";
 $email = "";
 $message = "";
 
+
 $form_valid = false;
 
 
@@ -35,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = strip_tags($_POST['username']);
     $email = strip_tags($_POST['email']);
     $message = strip_tags($_POST['message']);
+    
     $terms = isset($_POST['terms']);
     // "Message must be at least 10 caracters long"
     if (!validate_message($message)) {
@@ -59,7 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // "email must contain '@'"
     elseif (!validate_email($email)) {
         $email_error = "Email must contain '@'";
-    }else{
+    }
+    if (empty($user_error) && empty($email_error) && empty($terms_error) && empty($message_error)) {
         $form_valid = true;
     }
 
@@ -67,19 +70,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<form action="#" method="post">
+<form  action = "#" method="post">
     <div class="row mb-3 mt-3">
         <div class="col">
-            <input type="text" class="form-control" placeholder="Enter Name" name="username">
+            <input type="text" class="form-control" placeholder="Enter Name" name="username" value="<?php echo ($form_valid==false)? htmlspecialchars($username, ENT_QUOTES, 'UTF-8'):""; ?>">
             <small class="form-text text-danger"> <?php echo $user_error; ?></small>
         </div>
         <div class="col">
-            <input type="text" class="form-control" placeholder="Enter email" name="email">
+            <input type="text" class="form-control" placeholder="Enter email" name="email" value="<?php echo ($form_valid==false)? htmlspecialchars($email, ENT_QUOTES, 'UTF-8'):""; ?>">
             <small class="form-text text-danger"> <?php echo $email_error; ?></small>
         </div>
     </div>
     <div class="mb-3">
-        <textarea name="message" placeholder="Enter message" class="form-control"></textarea>
+        <textarea name="message" placeholder="Enter message" class="form-control"><?php echo ($form_valid==false)? htmlspecialchars($message, ENT_QUOTES, 'UTF-8'):""; ?></textarea>
         <small class="form-text text-danger"> <?php echo $message_error; ?></small>
     </div>
     <div class="mb-3">
