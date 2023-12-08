@@ -32,9 +32,9 @@ $form_valid = false;
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Here is the list of error messages that can be displayed:
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $message = $_POST['message'];
+    $username = strip_tags($_POST['username']);
+    $email = strip_tags($_POST['email']);
+    $message = strip_tags($_POST['message']);
     $terms = isset($_POST['terms']);
     // "Message must be at least 10 caracters long"
     if (!validate_message($message)) {
@@ -59,6 +59,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // "email must contain '@'"
     elseif (!validate_email($email)) {
         $email_error = "Email must contain '@'";
+    }else{
+        $form_valid = true;
     }
 
 }
@@ -96,11 +98,11 @@ if ($form_valid) :
 ?>
     <div class="card">
         <div class="card-header">
-            <p><?php echo $username; ?></p>
-            <p><?php echo $email; ?></p>
+            <p><?php echo htmlspecialchars($username, ENT_QUOTES, 'UTF-8'); ?></p>
+            <p><?php echo htmlspecialchars($email, ENT_QUOTES, 'UTF-8'); ?></p>
         </div>
         <div class="card-body">
-            <p class="card-text"><?php echo $message; ?></p>
+            <p class="card-text"><?php echo nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8')); ?></p>
         </div>
     </div>
 <?php
